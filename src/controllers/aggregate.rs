@@ -37,12 +37,12 @@ struct MediumRecord {
 }
 #[derive(Debug, Serialize, Clone)]
 struct OutputRecord {
-    #[serde(rename = "名称")]
-    name: String,
-    #[serde(rename = "型式")]
-    model: String,
     #[serde(rename = "メーカー")]
     manufacturer: String,
+    #[serde(rename = "型式")]
+    model: String,
+    #[serde(rename = "名称")]
+    name: String,
     #[serde(rename = "数量")]
     count: u32
 }

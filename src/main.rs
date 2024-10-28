@@ -12,7 +12,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    #[command(about = "Collection XLSX parts list")]
+    #[command(about = "Collect XLSX parts list")]
     Collection,
     #[command(about = "Check duplicate error in collection csv ")]
     Check,
