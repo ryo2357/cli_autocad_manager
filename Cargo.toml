@@ -1,5 +1,5 @@
 [package]
-name = "acm"
+name = "drawing_manager"
 version = "0.1.0"
 edition = "2021"
 
@@ -15,3 +15,8 @@ calamine = "0.26.1"
 
 csv = "1.1"
 encoding_rs_io = "0.1.7"
+
+
+[[bin]]
+name = "drm"
+path = "src/main.rs"
