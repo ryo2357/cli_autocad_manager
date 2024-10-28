@@ -25,7 +25,7 @@ fn main() -> anyhow::Result<()> {
     match &cli.command {
         
         Some(Commands::Collection) => {
-            controllers::collection::collection_xlsx_parts_list()?;
+            controllers::collect::collect_xlsx_parts_list()?;
         },
 
         Some(Commands::Check) => {

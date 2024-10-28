@@ -1,3 +1,3 @@
 pub mod aggregate;
-pub mod collection;
+pub mod collect;
 pub mod check;

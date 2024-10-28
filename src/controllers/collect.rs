@@ -11,7 +11,7 @@ const SEARCH_PATH_PATTERN:&str = "./**/*.xlsx";
 const CREATE_FILE_NAME:&str = "collection_parts_list.csv";
 
 
-pub fn collection_xlsx_parts_list()->Result<()>{
+pub fn collect_xlsx_parts_list()->Result<()>{
     let file = File::create(CREATE_FILE_NAME)?;
     let mut bfw = BufWriter::new(file);
     
