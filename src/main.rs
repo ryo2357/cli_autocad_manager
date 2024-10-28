@@ -12,17 +12,28 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    Aggregate
+    #[command(about = "Collection XLSX parts list")]
+    Collection,
+    #[command(about = "Check duplicate error in collection csv ")]
+    Check,
+    #[command(about = "Aggregate from collection csv")]
+    Aggregate,
 }
-
 #[allow(unused_variables)]
 fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
     match &cli.command {
+        
+        Some(Commands::Collection) => {
+            controllers::collection::collection_xlsx_parts_list()?;
+        },
 
+        Some(Commands::Check) => {
+            controllers::check::check_collection_csv()?;
+        },
         Some(Commands::Aggregate) => {
-            controllers::aggregate::aggregate_xlsx_parts_list()?;
-        }
+            controllers::aggregate::aggregate_collection_csv()?;
+        },
 
         None => {}
     }
