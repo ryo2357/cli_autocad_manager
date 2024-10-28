@@ -12,6 +12,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    // PartsTable で一括処理を実装する　案１
     #[command(about = "Collect XLSX parts list")]
     Collection,
     #[command(about = "Check duplicate error in collection csv ")]
@@ -35,7 +36,9 @@ fn main() -> anyhow::Result<()> {
             controllers::aggregate::aggregate_collection_csv()?;
         },
 
-        None => {}
+        None => {
+            // ここで一括処理を実装する
+        }
     }
 
     Ok(())
