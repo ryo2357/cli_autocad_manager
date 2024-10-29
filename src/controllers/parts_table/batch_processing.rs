@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use crate::controllers::{
+use crate::controllers::parts_table::{
     collect::collect_xlsx_parts_list,
     check::check_not_unusual_collection_csv,
     aggregate::aggregate_collection_csv,

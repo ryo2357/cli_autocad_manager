@@ -25,7 +25,7 @@ struct InputRecord {
     #[serde(rename = "メーカー")]
     manufacturer: String,
     #[serde(rename = "備考")]
-    remarks: String
+    note: String
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -34,6 +34,7 @@ struct MediumRecord {
     name: String,
     model: String,
     manufacturer: String,
+    note: String
 }
 #[derive(Debug, Serialize, Clone)]
 struct OutputRecord {
@@ -44,14 +45,16 @@ struct OutputRecord {
     #[serde(rename = "名称")]
     name: String,
     #[serde(rename = "数量")]
-    count: u32
+    count: u32,
+    #[serde(rename = "備考")]
+    note: String
 }
 
 pub fn aggregate_collection_csv()->Result<()>{
     let medium_vec = get_medium_records()?;
     let output_vec = get_output_records(medium_vec);
 
-    write_output_records_to_csv(output_vec)?;        
+    write_output_records_to_csv(output_vec)?;
     Ok(())
 }
 
@@ -77,6 +80,7 @@ fn get_medium_records() -> Result<Vec<MediumRecord>>{
                     name: record.name,
                     model: record.model,
                     manufacturer: record.manufacturer,
+                    note: record.note
                 }
             )
         }
@@ -99,10 +103,14 @@ fn get_output_records(medium_records: Vec<MediumRecord>) -> Vec<OutputRecord> {
             existing_record.count += 1;
         } else {
             record_map.insert(model, OutputRecord {
-                name: record.name.clone(),
-                model: record.model.clone(),
-                manufacturer: record.manufacturer.clone(),
+                // name: record.name.clone(),
+                // model: record.model.clone(),
+                // manufacturer: record.manufacturer.clone(),
+                name: record.name,
+                model: record.model,
+                manufacturer: record.manufacturer,
                 count: 1,
+                note: record.note
             });
         }
     }

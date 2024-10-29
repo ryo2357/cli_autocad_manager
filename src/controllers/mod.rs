@@ -1,4 +1,1 @@
-pub mod aggregate;
-pub mod collect;
-pub mod check;
-pub mod parts;
+pub mod parts_table;
