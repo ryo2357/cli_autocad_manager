@@ -54,7 +54,6 @@ pub fn check_collection_csv()->Result<()>{
 
 
 // TODO:一括処理実装の際に切り替える
-#[allow(dead_code)]
 pub fn check_not_unusual_collection_csv()->Result<bool>{
     let mut not_unusual= true;
     let file = File::open(FILE_NAME)?;
@@ -72,17 +71,17 @@ pub fn check_not_unusual_collection_csv()->Result<bool>{
         if let Some(existing_record) = record_map.get(&record.symbol) {
 
             if existing_record.model != record.model {
-                println!("重複エラー：記号<{}>にてモデル名が不一致", record.symbol);
+                println!("重複エラー：{}の記号<{}>にてモデル名が不一致", record.drawing_name,record.symbol);
                 not_unusual=false;
             }
             
             if existing_record.manufacturer != record.manufacturer {
-                println!("重複エラー：記号<{}>にてメーカー名が不一致", record.symbol);
+                println!("重複エラー：{}の記号<{}>にてメーカー名が不一致",record.drawing_name, record.symbol);
                 not_unusual=false;
             }
             
             if existing_record.name != record.name {
-                println!("重複エラー：記号<{}>にて名称が不一致", record.symbol);
+                println!("重複エラー：{}の記号<{}>にて名称が不一致",record.drawing_name, record.symbol);
                 not_unusual=false;
             }
         } else {

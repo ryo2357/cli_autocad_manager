@@ -23,7 +23,7 @@ pub fn collect_xlsx_parts_list()->Result<()>{
     for entry in glob(SEARCH_PATH_PATTERN)? {
         match entry {
             Ok(path) => {
-                println!("{}",path.display());
+                println!("部品集計: {}",path.display());
 
                 let file_name = path.to_str().unwrap();
                 // ファイル名に `~$` が含まれている場合はスキップ
