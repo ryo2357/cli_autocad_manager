@@ -1,5 +1,3 @@
-
-use std::process::Command;
 use clap::{CommandFactory, Parser, Subcommand};
 
 mod models;
@@ -52,8 +50,13 @@ enum ManageDatabaseCommands {
     },
     #[command(about = "Show database in excel")]
     Show,
-    // #[command(about = "Aggregate from collection csv")]
-    // Aggregate,
+    #[command(about = "create stage file from aggregate csv")]
+    Stage{
+        #[arg(help = "Path to the input csv aggregate file")]
+        input_file_path: String,
+        #[arg(help = "Path to the output yaml stage file")]
+        output_file_path: String,
+    },
 }
 #[allow(unused_variables)]
 fn main() -> anyhow::Result<()> {
@@ -84,9 +87,9 @@ fn main() -> anyhow::Result<()> {
                 Some(ManageDatabaseCommands::Show)=>{
                     controllers::manage_database::show::show_database_in_excel()?;
                     },
-                // Some(PartsTableCommands::Aggregate)=>{
-                //     controllers::parts_table::aggregate::aggregate_collection_csv()?;
-                //     },
+                Some(ManageDatabaseCommands::Stage{input_file_path,output_file_path})=>{
+                    controllers::manage_database::stage::create_stage_file(input_file_path,output_file_path)?;
+                    },
                 None=>{
                     controllers::manage_database::show::show_database_in_excel()?;
                 },
