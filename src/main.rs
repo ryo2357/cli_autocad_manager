@@ -2,9 +2,10 @@
 use std::process::Command;
 use clap::{CommandFactory, Parser, Subcommand};
 
-mod config;
 mod models;
 mod controllers;
+
+pub use models::config::Config;
 
 #[derive(Parser)]
 #[command(name = "cli-drawing-manager")]
@@ -42,10 +43,15 @@ enum PartsTableCommands {
 
 #[derive(Subcommand)]
 enum ManageDatabaseCommands {
-    #[command(about = "Collect XLSX parts list")]
-    Collection,
-    // #[command(about = "Check duplicate error in collection csv ")]
-    // Check,
+    #[command(about = "Develop future:Convert yaml to csv")]
+    Convert{
+        #[arg(help = "Path to the convert yaml file")]
+        input_file_path: String,
+        #[arg(help = "Path to the output csv file")]
+        output_file_path: String,
+    },
+    #[command(about = "Show database in excel")]
+    Show,
     // #[command(about = "Aggregate from collection csv")]
     // Aggregate,
 }
@@ -72,30 +78,24 @@ fn main() -> anyhow::Result<()> {
 
         Some(Commands::ManageDatabase{subcommand})=>{
             match subcommand{
-                Some(ManageDatabaseCommands::Collection)=>{
-                    controllers::parts_table::collect::collect_xlsx_parts_list()?;
+                Some(ManageDatabaseCommands::Convert{input_file_path, output_file_path})=>{
+                    controllers::manage_database::convert::convert_yaml_to_csv(input_file_path,output_file_path)?;
                 },
-                // Some(PartsTableCommands::Check)=>{
-                //     controllers::parts_table::check::check_collection_csv()?;
-                //     },
+                Some(ManageDatabaseCommands::Show)=>{
+                    controllers::manage_database::show::show_database_in_excel()?;
+                    },
                 // Some(PartsTableCommands::Aggregate)=>{
                 //     controllers::parts_table::aggregate::aggregate_collection_csv()?;
                 //     },
                 None=>{
-                    controllers::parts_table::batch_processing::aggregate_parts_table_from_xlsx()?;
+                    controllers::manage_database::show::show_database_in_excel()?;
                 },
             }
         }
 
         Some(Commands::Test)=>{
-            let config = config::Config::read();
-            println!("config.database_dir: {:?}",config.database_dir());
+            println!("test command");
 
-            let path_ref = config.database_dir();
-            let file_path= path_ref.join("aggregate_parts_list.csv");
-            Command::new("cmd")
-                .args(["/C", "start", "excel", file_path.to_str().unwrap()])
-                .spawn()?;
         }
 
         None => {
