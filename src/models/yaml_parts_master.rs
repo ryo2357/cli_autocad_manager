@@ -28,12 +28,14 @@ pub struct PartData {
 
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct PartsMaster{
     inner: Vec<PartData>,
     path:String
 }
 
 impl PartData{
+    #[allow(clippy::too_many_arguments,dead_code)]
     pub fn new(
         id: u32,
         name: String,

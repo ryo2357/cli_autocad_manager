@@ -1,14 +1,10 @@
 use serde::{Deserialize,Serialize};
 use anyhow::Result;
 
-use serde_yaml;
 use std::fs::File;
-use std::io::{Read, Write,BufWriter};
-use std::fs::OpenOptions;
 
-use csv::{ReaderBuilder, WriterBuilder};
+use csv::ReaderBuilder;
 use encoding_rs_io::DecodeReaderBytesBuilder;
-use csv::Writer;
 use encoding_rs::SHIFT_JIS;
 
 use crate::models::csv_database::PartRecord;
@@ -32,6 +28,7 @@ pub struct AggregateRecord {
 #[derive(Debug)]
 pub struct AggregateRecords{
     inner : Vec<AggregateRecord>,
+    #[allow(unused)]
     path:String
 }
 

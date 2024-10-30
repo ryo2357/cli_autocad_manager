@@ -52,10 +52,15 @@ enum ManageDatabaseCommands {
     Show,
     #[command(about = "create stage file from aggregate csv")]
     Stage{
-        #[arg(help = "Path to the input csv aggregate file")]
+        #[arg(help = "Path to the input csv aggregate file", default_value = "./aggregate_parts_list.csv")]
         input_file_path: String,
-        #[arg(help = "Path to the output yaml stage file")]
+        #[arg(help = "Path to the output yaml stage file", default_value = "./stage.yaml")]
         output_file_path: String,
+    },
+
+    Commit{
+        #[arg(help = "Path to the input yaml stage file", default_value = "./stage.yaml")]
+        input_file_path: String,
     },
 }
 #[allow(unused_variables)]
@@ -90,6 +95,9 @@ fn main() -> anyhow::Result<()> {
                 Some(ManageDatabaseCommands::Stage{input_file_path,output_file_path})=>{
                     controllers::manage_database::stage::create_stage_file(input_file_path,output_file_path)?;
                     },
+                Some(ManageDatabaseCommands::Commit{input_file_path})=>{
+                        controllers::manage_database::commit::commit_stage_file_to_database(input_file_path)?;
+                        },
                 None=>{
                     controllers::manage_database::show::show_database_in_excel()?;
                 },
@@ -98,7 +106,6 @@ fn main() -> anyhow::Result<()> {
 
         Some(Commands::Test)=>{
             println!("test command");
-
         }
 
         None => {

@@ -3,23 +3,22 @@ use anyhow::Result;
 
 use serde_yaml;
 use std::fs::File;
-use std::io::{Read, Write,BufWriter};
+use std::io::{Read, Write};
 use std::fs::OpenOptions;
 
 use csv::{ReaderBuilder, WriterBuilder};
 use encoding_rs_io::DecodeReaderBytesBuilder;
-use csv::Writer;
 use encoding_rs::SHIFT_JIS;
 
 
 #[derive(Debug, Deserialize,Serialize, Clone)]
 pub struct PartRecord {
-    #[serde(rename = "メーカー")]
-    manufacturer: String,
-    #[serde(rename = "型式")]
-    model: String,
     #[serde(rename = "名称")]
     name: String,
+    #[serde(rename = "型式")]
+    model: String,
+    #[serde(rename = "メーカー")]
+    manufacturer: String,
     #[serde(rename = "備考")]
     note: String,
     #[serde(rename = "代替製品")]
@@ -135,7 +134,7 @@ impl PartsDatabase {
                     if overwriting_record.note == String::default(){
                         overwriting_record.note = commit_database_record.note.clone();
                     }
-                    if overwriting_record.note == String::default(){
+                    if overwriting_record.url == String::default(){
                         overwriting_record.url = commit_database_record.url.clone();
                     }
                     if overwriting_record.alternate_model == String::default(){
@@ -156,11 +155,11 @@ impl PartsDatabase {
         Ok(())
     }
     pub fn save_overwriting(&self)->Result<()>{
-        if !std::path::Path::new(&self.path).exists() {
-            // ファイルが存在しない場合に作成
-            File::create(&self.path)?;
-        }
-        let mut output_file = File::open(&self.path)?;
+        let mut output_file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(&self.path)?;
         let mut wtr = WriterBuilder::new()
             .has_headers(true)
             .from_writer(vec![]);
@@ -171,7 +170,8 @@ impl PartsDatabase {
         let data = wtr.into_inner()?;
         let binding = String::from_utf8(data).unwrap();
         let (encoded, _, _) = SHIFT_JIS.encode(&binding);
-        // 構造体生成時にファイルを生成しているためopen
+
+        
         output_file.write_all(&encoded)?;
         Ok(())
     }
@@ -223,6 +223,7 @@ impl CommitRecords{
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub fn call(&self){
         println!("alternate_model: {}",self.inner.first().unwrap().new_record.alternate_model)
     }
